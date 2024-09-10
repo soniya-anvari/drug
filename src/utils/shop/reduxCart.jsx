@@ -17,8 +17,9 @@ const cartSlice = createSlice({
     addToCart(state, action) {
       console.log("addd", action);
       const existingIndex = state.cartItems.findIndex(
-        (item) => item.id === action.payload.product.id
+        (item) => item._id === action.payload.product._id
       );
+      console.log("id", existingIndex);
 
       if (existingIndex >= 0) {
         state.cartItems[existingIndex] = {
@@ -30,7 +31,10 @@ const cartSlice = createSlice({
           position: "bottom-left",
         });
       } else {
-        let tempProductItem = { ...action.payload.product, cartQuantity: 1 };
+        let tempProductItem = {
+          ...action.payload.product,
+          cartQuantity: action.payload.count,
+        };
         state.cartItems.push(tempProductItem);
         toast.success("Product added to cart", {
           position: "bottom-left",
@@ -43,7 +47,7 @@ const cartSlice = createSlice({
     },
     decreaseCart(state, action) {
       const itemIndex = state.cartItems.findIndex(
-        (item) => item.id === action.payload.id
+        (item) => item._id === action.payload._id
       );
 
       if (state.cartItems[itemIndex].cartQuantity > 1) {
@@ -54,7 +58,7 @@ const cartSlice = createSlice({
         });
       } else if (state.cartItems[itemIndex].cartQuantity === 1) {
         const nextCartItems = state.cartItems.filter(
-          (item) => item.id !== action.payload.id
+          (item) => item._id !== action.payload._id
         );
 
         state.cartItems = nextCartItems;
@@ -68,12 +72,14 @@ const cartSlice = createSlice({
     },
     removeFromCart(state, action) {
       state.cartItems.map((cartItem) => {
-        if (cartItem.id === action.payload.id) {
+        if (cartItem._id === action.payload._id) {
           const nextCartItems = state.cartItems.filter(
-            (item) => item.id !== cartItem.id
+            (item) => item._id !== cartItem._id
           );
 
           state.cartItems = nextCartItems;
+          state.cartTotalAmount = getTotalPrice(state.cartItems);
+          state.cartTotalQuantity = getCountOfProudcts(state.cartItems);
 
           toast.error("Product removed from cart", {
             position: "bottom-left",

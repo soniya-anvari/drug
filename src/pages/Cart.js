@@ -9,23 +9,29 @@ import {
   CartContext,
   RemoveCartContext,
 } from "../utils/shop/localCart";
-import { useSelector } from "react-redux";
+import { removeFromCart } from "../utils/shop/reduxCart";
+import { useDispatch, useSelector } from "react-redux";
+import getTotalPrice from "../helper/getTotalPrice";
 
 const Cart = ({ cartData }) => {
   const [cart, setCart] = useState(cartData);
+  const [amount, setAmount] = useState(0);
+  const dispatch = useDispatch();
+
   const { cartItems, cartTotalAmount, cartTotalQuantity } = useSelector(
     (state) => state.cartUser
   );
 
-  // useEffect(() => {
-  //   setCart(cartData);
-  // }, [cartData]);
+  useEffect(() => {
+    setCart(cartItems);
+  }, [cartItems]);
   // console.log(cartData)
 
   const delItem = (key) => {
-    const updatedCartData = [...cart];
+    const updatedCartData = [...cartItems];
     updatedCartData.splice(key, 1);
-    localStorage.setItem("cart", JSON.stringify(updatedCartData));
+    console.log(updatedCartData);
+    localStorage.setItem("cartItems", JSON.stringify(updatedCartData));
     setCart(updatedCartData);
   };
 
@@ -52,19 +58,19 @@ const Cart = ({ cartData }) => {
             </Table.Head>
 
             <Table.Body className='divide-y'>
-              {cartItems?.map((item, index) => (
+              {cart?.map((item, index) => (
                 <Table.Row
                   key={index}
                   className='bg-white dark:border-gray-700 dark:bg-gray-800'>
                   <Table.Cell>
                     <a
-                      onClick={() => delItem(index)}
+                      onClick={() => dispatch(removeFromCart(item))}
                       className='font-medium text-cyan-600 hover:underline dark:text-cyan-500'>
                       حذف از سبد خرید
                     </a>
                   </Table.Cell>
                   <Table.Cell className='whitespace-nowrap font-medium text-gray-900 dark:text-white'>
-                    {cartTotalQuantity}
+                    {item?.cartQuantity}
                   </Table.Cell>
                   <Table.Cell>{item?.price}</Table.Cell>
                   <Table.Cell>{item?.name}</Table.Cell>

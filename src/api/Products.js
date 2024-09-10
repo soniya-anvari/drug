@@ -2,6 +2,7 @@ import { PRODUCTS_URL } from "./api";
 import axios from "axios";
 
 import { refreshAccessToken } from "../api/Auth";
+
 export const PagedProductsRequest = async (params) => {
   try {
     const response = await axios.get(`${PRODUCTS_URL}?${params}`);

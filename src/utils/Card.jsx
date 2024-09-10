@@ -5,15 +5,17 @@ import { PRODUCTS_URL } from "../api/api.js";
 import { Card } from "flowbite-react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, Outlet, useNavigate } from "react-router-dom";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { addToCart } from "../hooks/redux/cartSlice.js";
 import { getProducts } from "../api/Products.js";
 import { setProducts } from "../features/product/Product-Slice.js";
+import axios from "axios";
+import { createProductRequest } from "../api/Products";
+
 export default function Pcard() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const products = useSelector((state) => state.products);
-  console.log("p", products);
 
   const { isPending, data, error } = useQuery({
     queryKey: ["repoData"],
@@ -32,7 +34,6 @@ export default function Pcard() {
   if (error) return "An error has occurred: " + error.message;
 
   const handleAddToCart = (product) => {
-    console.log("pcard", product);
     dispatch(addToCart({ product, count: 1 }));
     navigate("/cart");
   };

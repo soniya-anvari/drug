@@ -30,7 +30,8 @@ function AddProduct() {
     isLoading: true,
   });
 
-  const handleAddProduct = async () => {
+  const handleAddProduct = async (event) => {
+    event.preventDefault();
     if (
       !productName ||
       !productBrand ||
@@ -176,7 +177,7 @@ function AddProduct() {
       </div>
       <Modal show={openModal} size='xl' onClose={onCloseModal} popup>
         <Modal.Header />
-        <form onSubmit={handleAddProduct}>
+        <form onSubmit={() => handleAddProduct()}>
           {error && <p className='text-red-500'>{error}</p>}{" "}
           <Modal.Body>
             <div className='w-full'>
@@ -322,7 +323,7 @@ function AddProduct() {
               <button
                 className='bg-green-400 w-full hover:bg-green-500'
                 type='submit'
-                onClick={handleAddProduct}>
+                onClick={() => handleAddProduct()}>
                 اضافه کردن محصول
               </button>
             </div>

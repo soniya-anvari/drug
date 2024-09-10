@@ -14,6 +14,7 @@ export default function Pcard() {
   console.log("c", cart);
   const { id } = useParams();
   const [count, setCount] = useState(1);
+
   // const navigate = useNavigate();
   const [product, setProduct] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -48,7 +49,7 @@ export default function Pcard() {
         // setMyProdcuts(existingProducts);
         // console.log(existingProducts);
         setProduct(data);
-        console.log(data?.data?.product);
+        console.log("x", data?.data?.product);
         setIsLoading(false);
       } catch (error) {
         setError(error);
